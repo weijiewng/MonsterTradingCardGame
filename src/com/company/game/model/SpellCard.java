@@ -5,8 +5,8 @@ import com.company.game.enums.Rarity;
 
 public class SpellCard extends Card{
 
-    public SpellCard(String name, int damage, Element element, Rarity rarity) {
-        super(name, damage, element, rarity);
+    public SpellCard(String id, String name, int damage, Element element, Rarity rarity) {
+        super(id, name, damage, element, rarity);
     }
 
     @Override

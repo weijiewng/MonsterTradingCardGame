@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class Controller {
 
-    public abstract Response handleRequest(Request request);
+    public abstract Response handleRequest(Request request) throws JsonProcessingException;
 
     protected Response json(Object object) {
         ObjectMapper mapper = new ObjectMapper();

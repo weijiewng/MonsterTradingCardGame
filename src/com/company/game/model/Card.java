@@ -4,16 +4,26 @@ import com.company.game.enums.Element;
 import com.company.game.enums.Rarity;
 
 public abstract class Card {
+    private String id;
     private String name;
     private int damage;
     private Element element;
     private Rarity rarity;
 
-    public Card(String name, int damage, Element element, Rarity rarity){
+    public Card(String id, String name, int damage, Element element, Rarity rarity){
+        this.id = id;
         this.name = name;
         this.damage = damage;
         this.element = element;
         this.rarity = rarity;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

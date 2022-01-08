@@ -44,8 +44,6 @@ public class BoosterRepository extends Repository{
                 e.printStackTrace();
             }
         }
-
-
     }
 
     public Booster getBooster(){
@@ -53,7 +51,7 @@ public class BoosterRepository extends Repository{
         try(Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(
                     //TODO Looking which is the first booster
-                    "SELECT * FROM Booster WHERE id = 1"
+                    "SELECT * FROM booster WHERE id = 1"
             )
         ){
             ResultSet resultSet =  statement.executeQuery();
@@ -64,18 +62,18 @@ public class BoosterRepository extends Repository{
             Card card;
             for (int i = 0; i < cardIdList.size(); i++) {
                 try (PreparedStatement secondStatement = connection.prepareStatement(
-                        "SELECT class, name, damage, element, rarity, type FROM Card INNER JOIN Booster ON Card.id = Booster.cardID WHERE Booster.id = ?"
+                        "SELECT class, name, damage, element, rarity, type FROM card INNER JOIN booster ON card.id = booster.cardID WHERE booster.id = ?"
                 )){
                     secondStatement.setInt(1, 1);
                     resultSet =  secondStatement.executeQuery();
                     if(resultSet.next()){
                         if(resultSet.getString("class").equals("Monster")){
-                            card = new MonsterCard(resultSet.getString("name"), resultSet.getInt("damage"),
+                            card = new MonsterCard(resultSet.getString("id"),resultSet.getString("name"), resultSet.getInt("damage"),
                                     Element.valueOf(resultSet.getString("Element")),
                                     Rarity.valueOf(resultSet.getString("Rarity")), Type.valueOf(resultSet.getString("Type")));
                         }
                         else{
-                            card = new SpellCard(resultSet.getString("name"), resultSet.getInt("damage"),
+                            card = new SpellCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
                                     Element.valueOf(resultSet.getString("Element")),
                                     Rarity.valueOf(resultSet.getString("Rarity")));
                         }

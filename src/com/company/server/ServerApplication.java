@@ -1,6 +1,7 @@
 package com.company.server;
 
-public interface ServerApplication {
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-    Response handleRequest(Request request);
+public interface ServerApplication {
+    Response handleRequest(Request request) throws JsonProcessingException;
 }

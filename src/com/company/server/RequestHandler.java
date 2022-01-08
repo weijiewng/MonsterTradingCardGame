@@ -29,7 +29,6 @@ public class RequestHandler implements Runnable {
             sendResponse(response);
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName() + " Error: " + e.getMessage());
-            //e.printStackTrace();
         } finally {
             try {
                 if (out != null) {
@@ -48,7 +47,6 @@ public class RequestHandler implements Runnable {
 
     public Request getRequest() throws IOException {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
         return RequestBuilder.build(in);
     }
 

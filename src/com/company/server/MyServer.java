@@ -15,7 +15,7 @@ public class MyServer {
     }
 
     public void start() throws IOException {
-        System.out.println("Start com.company.server...");
+        System.out.println("Start Monster Trading Card Server...");
         server = new ServerSocket(port, 5);
         System.out.println("Server running at: http://localhost:" + port);
 
@@ -26,7 +26,9 @@ public class MyServer {
         while (true) {
             try {
                 Socket socket = server.accept();
-                Thread thread = new Thread(new RequestHandler(socket, application));
+                //Thread thread = new Thread(new RequestHandler(socket, application));
+                //thread.start();
+                Thread thread = new Thread (new RequestHandler(socket, application));
                 thread.start();
             } catch (IOException e) {
                 e.printStackTrace();

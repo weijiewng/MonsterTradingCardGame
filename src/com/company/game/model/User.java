@@ -1,14 +1,32 @@
 package com.company.game.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.ArrayList;
 
 public class User {
+
+    @JsonProperty("Token")
+    private String token;
+    @JsonProperty("Username")
     private String username;
+    @JsonProperty("Password")
     private String password;
+    //TODO if login repository handles this to initialize
+    @JsonIgnore
     private int coins;
+    @JsonIgnore
     private int elo;
+    @JsonIgnore
     private ArrayList<Card> cardList;
+    @JsonIgnore
     private Deck deck;
+
+    public User(){
+
+    }
 
     public User(String username, String password) {
         this.username = username;
@@ -19,13 +37,22 @@ public class User {
         //TODO DECK
     }
 
-    public User(String username, String password, int coins, int elo, ArrayList<Card> cardList, Deck deck) {
+    public User(String token, String username, String password, int coins, int elo, ArrayList<Card> cardList, Deck deck) {
+        this.token = token;
         this.username = username;
         this.password = password;
         this.coins = coins;
         this.elo = elo;
         this.cardList = cardList;
         this.deck = deck;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUsername() {

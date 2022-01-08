@@ -7,8 +7,8 @@ import com.company.game.enums.Type;
 public class MonsterCard extends Card {
     private Type type;
 
-    public MonsterCard(String name, int damage, Element element, Rarity rarity, Type type) {
-        super(name, damage, element, rarity);
+    public MonsterCard(String id, String name, int damage, Element element, Rarity rarity, Type type) {
+        super(id, name, damage, element, rarity);
         this.type = type;
     }
 

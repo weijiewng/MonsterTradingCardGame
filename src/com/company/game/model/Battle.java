@@ -111,7 +111,7 @@ public class Battle {
     }
 
     private int compareMonsterType(Card card1, Card card2){
-        //TODO otherewise compare type
+        //TODO otherwise compare type
         return calculateDamage(card1.getDamage(), card2.getDamage());
     }
 

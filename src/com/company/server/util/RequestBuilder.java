@@ -36,8 +36,6 @@ public class RequestBuilder {
     }
 
     private static void parseHeader(Request request, String header) throws IOException {
-        //System.out.println(header);
-
         parseMethodeAndRoute(request, header);
         // TODO parse parameters
         parseContentType(request, header);
