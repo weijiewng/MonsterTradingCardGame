@@ -2,29 +2,34 @@ package com.company.game.model;
 
 import com.company.game.enums.Element;
 import com.company.game.enums.Rarity;
-import com.company.game.enums.Type;
+import com.company.game.enums.MonsterType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MonsterCard extends Card {
-    private Type type;
+    @JsonProperty("Type")
+    private MonsterType monsterType;
 
-    public MonsterCard(String id, String name, int damage, Element element, Rarity rarity, Type type) {
+    public MonsterCard(){
+
+    }
+    public MonsterCard(String id, String name, int damage, Element element, Rarity rarity, MonsterType monsterType) {
         super(id, name, damage, element, rarity);
-        this.type = type;
+        this.monsterType = monsterType;
     }
 
-    public Type getType() {
-        return type;
+    public MonsterType getMonsterType() {
+        return monsterType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setMonsterType(MonsterType type) {
+        this.monsterType = type;
     }
 
     @Override
     public String toString() {
         return "MonsterCard{" +
                 super.toString() +
-                ", type=" + type +
+                ", MonsterType=" + monsterType +
                 '}';
     }
 }

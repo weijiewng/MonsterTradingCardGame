@@ -2,7 +2,7 @@ package com.company.game.repository;
 
 import com.company.game.enums.Element;
 import com.company.game.enums.Rarity;
-import com.company.game.enums.Type;
+import com.company.game.enums.MonsterType;
 import com.company.game.model.Booster;
 import com.company.game.model.Card;
 import com.company.game.model.MonsterCard;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 //TODO looking how booster are stored
 public class BoosterRepository extends Repository{
 
+    //TODO Change
     public void saveBooster(ArrayList<String> cardIdList){
         int id = 0;
         //Maybe without prepared
@@ -62,20 +63,20 @@ public class BoosterRepository extends Repository{
             Card card;
             for (int i = 0; i < cardIdList.size(); i++) {
                 try (PreparedStatement secondStatement = connection.prepareStatement(
-                        "SELECT class, name, damage, element, rarity, type FROM card INNER JOIN booster ON card.id = booster.cardID WHERE booster.id = ?"
+                        "SELECT class, name, damage, element, rarity, mosnterType FROM card LEFT JOIN booster ON card.id = booster.cardID WHERE booster.id = ?"
                 )){
                     secondStatement.setInt(1, 1);
                     resultSet =  secondStatement.executeQuery();
                     if(resultSet.next()){
-                        if(resultSet.getString("class").equals("Monster")){
-                            card = new MonsterCard(resultSet.getString("id"),resultSet.getString("name"), resultSet.getInt("damage"),
-                                    Element.valueOf(resultSet.getString("Element")),
-                                    Rarity.valueOf(resultSet.getString("Rarity")), Type.valueOf(resultSet.getString("Type")));
+                        if(resultSet.getString("monsterType") != null){
+                            card = new MonsterCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
+                                    Element.valueOf(resultSet.getString("element")),
+                                    Rarity.valueOf(resultSet.getString("rarity")), MonsterType.valueOf(resultSet.getString("monsterTypeype")));
                         }
-                        else{
+                else {
                             card = new SpellCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
-                                    Element.valueOf(resultSet.getString("Element")),
-                                    Rarity.valueOf(resultSet.getString("Rarity")));
+                                    Element.valueOf(resultSet.getString("element")),
+                                    Rarity.valueOf(resultSet.getString("rarity")));
                         }
                         booster.addCard(card);
                         //TODO after booster is generated

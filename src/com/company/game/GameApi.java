@@ -1,24 +1,56 @@
 package com.company.game;
 
-import com.company.game.controller.BattleController;
-import com.company.game.controller.UserController;
-import com.company.game.repository.UserRepository;
-import com.company.game.service.UserService;
+import com.company.game.controller.*;
+import com.company.game.repository.*;
+import com.company.game.service.*;
 import com.company.server.Request;
 import com.company.server.Response;
 import com.company.server.ServerApplication;
+import com.company.server.http.ContentType;
+import com.company.server.http.HttpStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class GameApi implements ServerApplication {
 
     private UserController userController;
+    private CardController cardController;
+    private BoosterController boosterController;
+    private BattleController battleController;
+    private DeckController deckController;
 
     public GameApi() {
         this.userController = new UserController(new UserService(), new UserRepository());
+        this.cardController = new CardController(new CardService(), new CardRepository());
+        this.boosterController = new BoosterController(new BoosterService(), new BoosterRepository());
+        this.battleController = new BattleController(new BattleService(), new BattleRepository());
+        this.deckController = new DeckController(new DeckService(), new DeckRepository());
     }
 
     @Override
     public Response handleRequest(Request request) throws JsonProcessingException {
-        return userController.handleRequest(request);
+        String route = request.getRoute();
+        switch(route){
+            case "/users":
+            case "/sessions": {
+                return userController.handleRequest(request);
+            }
+            case "/cards":{
+                return cardController.handleRequest(request);
+            }
+            case "/boosters":{
+                return boosterController.handleRequest(request);
+            }
+            case "/battles":{
+                return battleController.handleRequest(request);
+            }
+            case "/deck":{
+                return deckController.handleRequest(request);
+            }
+        }
+        Response response = new Response();
+        response.setStatus(HttpStatus.NOT_FOUND);
+        response.setContentType(ContentType.JSON);
+        response.setContent("{ \"error\": \"Not Found\"}");
+        return response;
     }
 }

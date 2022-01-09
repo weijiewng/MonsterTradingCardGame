@@ -52,7 +52,6 @@ public class RequestHandler implements Runnable {
 
     public void sendResponse(Response response) throws IOException {
         out = new PrintWriter(socket.getOutputStream(), true);
-
         out.write(response.toString());
     }
 }

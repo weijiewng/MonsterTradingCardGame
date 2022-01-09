@@ -12,10 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UserController extends Controller{
 
+    ObjectMapper objectMapper;
     private final UserService userService;
     private final UserRepository userRepository;
 
     public UserController(UserService userService, UserRepository userRepository) {
+        this.objectMapper = new ObjectMapper();
         this.userService = userService;
         this.userRepository = userRepository;
     }
@@ -27,6 +29,7 @@ public class UserController extends Controller{
             String route = splits[splits.length - 1];
             if(route.equals("users")){
                 return registration(request.getContent());
+
             }
             else if(route.equals("sessions")){
                 return login(request.getContent());
@@ -40,17 +43,22 @@ public class UserController extends Controller{
     }
 
     private Response registration(String json) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
         User user = objectMapper.readValue(json, User.class);
         String token = "Basic " + user.getUsername() + "-mtcgToken";
         user.setToken(token);
-        userRepository.registration(user);
+        user = userRepository.registration(user);
+        if(user != null){
+            return response(HttpStatus.OK, ContentType.JSON, user.getToken());
+        }
+        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, "Bad Request");
+    }
+
+    private Response login(String json) throws JsonProcessingException {
+        User user = objectMapper.readValue(json, User.class);
+        userRepository.login(user);
+
         return json(user);
     }
 
-    private Response login(String json){
-        User user = toObject(json, User.class);
-        userRepository.login(user);
-        return json(user);
-    }
+
 }

@@ -3,6 +3,7 @@ package com.company.server;
 public class Request {
     private String method;
     private String route;
+    private String authorization;
     private String content;
     private String contentType;
     private int contentLength;
@@ -21,6 +22,14 @@ public class Request {
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public String getAuthorization() {
+        return authorization;
+    }
+
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
     public String getContent() {

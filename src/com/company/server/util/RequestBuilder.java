@@ -31,13 +31,12 @@ public class RequestBuilder {
         int read = in.read(content, 0, content.length);
 
         request.setContent(new String(content));
-
         return request;
     }
 
     private static void parseHeader(Request request, String header) throws IOException {
         parseMethodeAndRoute(request, header);
-        // TODO parse parameters
+        parseAuthorization(request, header);
         parseContentType(request, header);
         parseContentLength(request, header);
     }
@@ -56,6 +55,10 @@ public class RequestBuilder {
 
     private static void parseContentType(Request request, String header) {
         request.setContentType(getHttpHeader(header, "Content-Type"));
+    }
+
+    private static void parseAuthorization(Request request, String header){
+        request.setAuthorization(getHttpHeader(header, "Authorization"));
     }
 
     private static void parseContentLength(Request request, String header) {

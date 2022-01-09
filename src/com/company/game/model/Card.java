@@ -2,13 +2,24 @@ package com.company.game.model;
 
 import com.company.game.enums.Element;
 import com.company.game.enums.Rarity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class Card {
+
+    @JsonProperty("Id")
     private String id;
+    @JsonProperty("Name")
     private String name;
+    @JsonProperty("Damage")
     private int damage;
+    @JsonProperty("Element")
     private Element element;
+    @JsonProperty("Rarity")
     private Rarity rarity;
+
+    public Card(){
+
+    }
 
     public Card(String id, String name, int damage, Element element, Rarity rarity){
         this.id = id;
@@ -16,6 +27,7 @@ public abstract class Card {
         this.damage = damage;
         this.element = element;
         this.rarity = rarity;
+
     }
 
     public String getId() {

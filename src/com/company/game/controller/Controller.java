@@ -26,7 +26,6 @@ public abstract class Controller {
 
     protected <T> T toObject(String json, Class<T> c) {
         ObjectMapper mapper = new ObjectMapper();
-
         T object = null;
         try {
             object = mapper.readValue(json, c);

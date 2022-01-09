@@ -2,7 +2,6 @@ package com.company.game.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.ArrayList;
 
@@ -15,17 +14,16 @@ public class User {
     @JsonProperty("Password")
     private String password;
     //TODO if login repository handles this to initialize
-    @JsonIgnore
+    @JsonProperty("Coins")
     private int coins;
-    @JsonIgnore
+    @JsonProperty("Elo")
     private int elo;
-    @JsonIgnore
+    @JsonProperty("Card List")
     private ArrayList<Card> cardList;
-    @JsonIgnore
+    @JsonProperty("Deck")
     private Deck deck;
 
     public User(){
-
     }
 
     public User(String username, String password) {

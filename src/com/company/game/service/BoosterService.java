@@ -4,14 +4,10 @@ import com.company.game.model.Card;
 
 import java.util.ArrayList;
 
-public class CardService {
+public class BoosterService {
     private ArrayList<Card> cardList;
 
-    public CardService() {
+    public BoosterService() {
         this.cardList = new ArrayList<Card>();
-    }
-
-    public void addCard(Card card){
-        cardList.add(card);
     }
 }

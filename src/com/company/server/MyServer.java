@@ -18,7 +18,6 @@ public class MyServer {
         System.out.println("Start Monster Trading Card Server...");
         server = new ServerSocket(port, 5);
         System.out.println("Server running at: http://localhost:" + port);
-
         run();
     }
 
@@ -26,8 +25,6 @@ public class MyServer {
         while (true) {
             try {
                 Socket socket = server.accept();
-                //Thread thread = new Thread(new RequestHandler(socket, application));
-                //thread.start();
                 Thread thread = new Thread (new RequestHandler(socket, application));
                 thread.start();
             } catch (IOException e) {

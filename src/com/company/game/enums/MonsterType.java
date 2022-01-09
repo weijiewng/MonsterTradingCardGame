@@ -1,6 +1,6 @@
 package com.company.game.enums;
 
-public enum Type {
+public enum MonsterType {
     GOBLIN,
     ORC,
     MAGE,
