@@ -6,7 +6,7 @@ import com.company.game.enums.MonsterType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MonsterCard extends Card {
-    @JsonProperty("MonsterType")
+    @JsonProperty("Monster Type")
     private MonsterType monsterType;
 
     public MonsterCard(){

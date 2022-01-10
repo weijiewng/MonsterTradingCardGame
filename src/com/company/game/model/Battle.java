@@ -4,9 +4,10 @@ import com.company.game.enums.Element;
 import com.company.game.enums.MonsterType;
 import com.company.game.util.Toolbox;
 
+import java.util.UUID;
+
 public class Battle {
     private final int maxCombatRound = 100;
-    private String id;
     private User player1;
     private User player2;
     private Deck deck1;
@@ -16,7 +17,6 @@ public class Battle {
     StringBuilder log;
 
     public Battle(User player1, User player2, Deck deck1, Deck deck2) {
-        this.id = Toolbox.createUUID();
         this.player1 = player1;
         this.player2 = player2;
         this.deck1 = new Deck(deck1.getDeck());
@@ -24,14 +24,9 @@ public class Battle {
         log = new StringBuilder();
     }
     public Battle(User player1, Deck deck1){
-        this.id = Toolbox.createUUID();
         this.player1 = player1;
         this.deck1 = new Deck(deck1.getDeck());
         log = new StringBuilder();
-    }
-
-    public String getId() {
-        return id;
     }
 
     public User getPlayer1() {
@@ -82,28 +77,36 @@ public class Battle {
         for (int i = 1; i < maxCombatRound; i++) {
             if(deck1.getDeck().size() == 0){
                 result = 2; //Player 2 won
-                log.append("Player2 wins\n\n");
+                log.append(player2.getUsername());
+                log.append(" wins\n\n");
                 break;
             }
             else if(deck2.getDeck().size() == 0){
                 result = 1; //Player 1 won
-                log.append("Player1 wins\n\n");
+                log.append(player1.getUsername());
+                log.append(" wins\n\n");
                 break;
             }
-            log.append("Player1 Cards: ");
+            log.append(player1.getUsername());
+            log.append(" Cards: ");
             log.append(deck1.getDeck().size());
-            log.append("\nPlayer2 Cards: ");
+            log.append("\n");
+            log.append(player2.getUsername());
+            log.append(" Cards: ");
             log.append(deck2.getDeck().size());
             card1 = deck1.getFirstCard();
             card2 = deck2.getFirstCard();
             log.append("\nTurn ");
             log.append(i);
             log.append(": ");
-            log.append("Player1: ");
+            log.append(player1.getUsername());
+            log.append(": ");
             log.append(card1.getName());
             log.append(" (");
             log.append(card1.getElement());
-            log.append(") vs Player2: ");
+            log.append(") vs ");
+            log.append(player2.getUsername());
+            log.append(": ");
             log.append(card2.getName());
             log.append(" (");
             log.append(card2.getElement());

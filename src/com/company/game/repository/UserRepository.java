@@ -16,7 +16,7 @@ public class UserRepository extends Repository{
         try(Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(
                     //TODO set other values
-                    "INSERT INTO \"user\" (id, username, password, coins) VALUES (?, ?, ?, ?)"
+                    "INSERT INTO \"user\" (id, username, password, coins, elo) VALUES (?, ?, ?, ?, ?)"
             )
         ){
             String hash = Toolbox.createHash(user.getPassword());
@@ -26,6 +26,7 @@ public class UserRepository extends Repository{
                 statement.setString(2, user.getUsername());
                 statement.setString(3, user.getPassword());
                 statement.setInt(4, user.getCoins());
+                statement.setInt(5, user.getElo());
                 statement.execute();
                 return user;
             }
@@ -55,8 +56,95 @@ public class UserRepository extends Repository{
         catch(SQLException e){
             e.printStackTrace();
         }
-        //TODO Maybe error code dont know how to handle yet
         return null;
     }
 
+    public User getUserData(String token){
+        try(Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM \"user\" WHERE id = ?"
+            )
+        ){
+            User user = new User();
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                user.setUsername(resultSet.getString("username"));
+                user.setCoins(resultSet.getInt("coins"));
+                user.setName(resultSet.getString("name"));
+                user.setBio(resultSet.getString("bio"));
+                user.setImage(resultSet.getString("image"));
+                return user;
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User getStats(String token) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM \"user\" WHERE id = ?"
+             )
+        ) {
+            User user = new User();
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                user.setUsername(resultSet.getString("username"));
+                user.setWin(resultSet.getInt("win"));
+                user.setLose(resultSet.getInt("lose"));
+                user.setDraw(resultSet.getInt("draw"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User getScore(String token) {
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT * FROM \"user\" WHERE id = ?"
+             )
+        ) {
+            User user = new User();
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                user.setUsername(resultSet.getString("username"));
+                user.setElo(resultSet.getInt("elo"));
+                user.setWin(resultSet.getInt("win"));
+                user.setLose(resultSet.getInt("lose"));
+                user.setDraw(resultSet.getInt("draw"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean setUserData(String token, String name, String bio, String image){
+        try(Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE \"user\" SET name = ?, bio = ?, image = ? WHERE id = ?"
+            )
+        ){
+            statement.setString(1, name);
+            statement.setString(2, bio);
+            statement.setString(3, image);
+            statement.setString(4, token);
+            statement.execute();
+            return true;
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

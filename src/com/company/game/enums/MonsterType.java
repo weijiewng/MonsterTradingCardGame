@@ -7,5 +7,5 @@ public enum MonsterType {
     WIZARD,
     KRAKEN,
     FIREELF,
-    KNIGHT
+    KNIGHT,
 }

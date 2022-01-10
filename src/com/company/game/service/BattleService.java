@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class BattleService {
     ArrayList<User> battleReadyUser;
     ArrayList<Battle> battleList;
+
     public BattleService() {
         this.battleReadyUser = new ArrayList<User>();
         this.battleList = new ArrayList<Battle>();
@@ -37,6 +38,7 @@ public class BattleService {
         if(waitingForBattle(user)){
             return startLookingForBattle(user);
         }
+        removeUser(user);
         return null;
 
     }

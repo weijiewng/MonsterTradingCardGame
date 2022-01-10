@@ -5,7 +5,6 @@ import com.company.game.model.MonsterCard;
 import com.company.game.model.SpellCard;
 import com.company.game.model.User;
 import com.company.game.repository.CardRepository;
-import com.company.game.service.CardService;
 import com.company.game.service.UserService;
 import com.company.game.util.Toolbox;
 import com.company.server.Request;
@@ -13,7 +12,6 @@ import com.company.server.Response;
 import com.company.server.http.ContentType;
 import com.company.server.http.HttpStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,11 +20,9 @@ import java.util.ArrayList;
 
 public class CardController extends Controller{
 
-    private final CardService cardService;
     private final CardRepository cardRepository;
 
-    public CardController(CardService cardService, CardRepository cardRepository) {
-        this.cardService = cardService;
+    public CardController(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
 
@@ -56,7 +52,7 @@ public class CardController extends Controller{
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
 
-        if(jsonNode.has("MonsterType")){
+        if(jsonNode.has("Monster Type")){
             card = objectMapper.readValue(json, MonsterCard.class);
         }
         else{

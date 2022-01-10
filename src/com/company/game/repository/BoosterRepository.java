@@ -13,10 +13,8 @@ import com.company.game.util.Toolbox;
 import java.sql.*;
 import java.util.ArrayList;
 
-//TODO looking how booster are stored
 public class BoosterRepository extends Repository{
 
-    //TODO Change
     public boolean saveBooster(ArrayList<Card> booster, String boosterName, int cost){
         String uuid = Toolbox.createUUID();
         for (int i = 0; i < booster.size(); i++) {

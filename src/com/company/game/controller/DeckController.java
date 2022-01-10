@@ -2,8 +2,6 @@ package com.company.game.controller;
 
 import com.company.game.model.Card;
 import com.company.game.repository.DeckRepository;
-import com.company.game.repository.UserRepository;
-import com.company.game.service.DeckService;
 import com.company.game.service.UserService;
 import com.company.server.Request;
 import com.company.server.Response;
@@ -20,12 +18,10 @@ import java.util.LinkedList;
 public class DeckController extends Controller{
 
     ObjectMapper objectMapper;
-    private final DeckService deckService;
     private final DeckRepository deckRepository;
 
-    public DeckController(DeckService deckService, DeckRepository deckRepository) {
+    public DeckController(DeckRepository deckRepository) {
         objectMapper = new ObjectMapper();
-        this.deckService = deckService;
         this.deckRepository = deckRepository;
     }
 

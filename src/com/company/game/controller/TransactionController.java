@@ -25,8 +25,13 @@ public class TransactionController extends Controller{
 
     @Override
     public Response handleRequest(Request request) throws JsonProcessingException {
-        //TODO change
-        return buyPackage(request.getContent(), request.getAuthorization());
+        if(UserService.checkIfUserIsLoggedIn(request.getAuthorization())) {
+            return buyPackage(request.getContent(), request.getAuthorization());
+        }
+        return response(
+                HttpStatus.NOT_FOUND,
+                ContentType.HTML, HttpStatus.NOT_FOUND.message
+        );
     }
 
     private Response buyPackage(String json, String token) throws JsonProcessingException {

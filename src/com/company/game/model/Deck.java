@@ -10,7 +10,7 @@ public class Deck {
     }
 
     public Deck(LinkedList<Card> deck){
-        this.deck = new LinkedList<Card>(deck);
+        this.deck = new LinkedList<>(deck);
     }
 
     public LinkedList<Card> getDeck() {

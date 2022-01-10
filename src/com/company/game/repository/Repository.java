@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public abstract class Repository {
     protected Connection getConnection() throws SQLException{
         Connection connection = DriverManager.getConnection(
-                //TODO Change how to login to databse
+                //Need to change if database is build different
                 "jdbc:postgresql://localhost:5432/postgres",
                 "postgres",
                 "postgres"

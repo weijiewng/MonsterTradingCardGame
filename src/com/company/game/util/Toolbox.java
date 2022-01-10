@@ -43,10 +43,10 @@ public class Toolbox {
 
     public static Card getCardFromResultSet(ResultSet resultSet) throws SQLException {
         Card card;
-        if(resultSet.getString("monsterType") != null){
+        if(resultSet.getString("monstertype") != null){
             card = new MonsterCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
                     Element.valueOf(resultSet.getString("element")),
-                    Rarity.valueOf(resultSet.getString("rarity")), MonsterType.valueOf(resultSet.getString("monsterType")));
+                    Rarity.valueOf(resultSet.getString("rarity")), MonsterType.valueOf(resultSet.getString("monstertype")));
         }
         else {
             card = new SpellCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),

@@ -48,10 +48,33 @@ public class BattleController extends Controller{
             user.setDeck(deck);
             Battle battle = battleService.startLookingForBattle(user);
             if(battle != null){
+                setUserStatus(battle, user.getToken());
                 return response(HttpStatus.OK, ContentType.HTML, battle.getLog().toString());
             }
             return response(HttpStatus.INTERNAL_SERVER_ERROR, ContentType.HTML, "No user found for battle");
         }
         return response(HttpStatus.BAD_REQUEST, ContentType.HTML, "Bad Request");
+    }
+
+    private void setUserStatus(Battle battle, String userToken){
+        if(battle.getResult() == 1){
+            if(userToken == battle.getPlayer1().getToken()){
+                battleRepository.win(userToken);
+            }
+            else{
+                battleRepository.lose(userToken);
+            }
+        }
+        else if(battle.getResult() == 2){
+            if(userToken == battle.getPlayer1().getToken()){
+                battleRepository.lose(userToken);
+            }
+            else{
+                battleRepository.win(userToken);
+            }
+        }
+        else{
+            battleRepository.draw(userToken);
+        }
     }
 }
