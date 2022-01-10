@@ -16,6 +16,10 @@ public class Battle {
     private boolean status;
     StringBuilder log;
 
+    public Battle(){
+        log = new StringBuilder();
+    }
+
     public Battle(User player1, User player2, Deck deck1, Deck deck2) {
         this.player1 = player1;
         this.player2 = player2;
@@ -128,7 +132,7 @@ public class Battle {
         }
     }
 
-    private int compareSpellElement(Card card1, Card card2){
+    public int compareSpellElement(Card card1, Card card2){
         int damage1 = card1.getDamage();
         int damage2 = card2.getDamage();
         Element element1 = card1.getElement();
@@ -140,27 +144,33 @@ public class Battle {
                     if (element2 == Element.FIRE) {
                         damage1 *= 2;
                         damage2 /= 2;
+                        break;
                     } else if (element2 == Element.GRASS) {
                         damage1 /= 2;
                         damage2 *= 2;
+                        break;
                     }
                 }
                 case FIRE: {
                     if (element2 == Element.WATER) {
                         damage1 /=  2;
                         damage2 *=  2;
+                        break;
                     } else if (element2 == Element.GRASS) {
                         damage1 *= 2;
                         damage2 /= 2;
+                        break;
                     }
                 }
                 case GRASS: {
                     if (element2 == Element.WATER) {
                         damage1 *= 2;
                         damage2 /= 2;
+                        break;
                     } else if (element2 == Element.FIRE) {
                         damage1 /= 2;
-                        damage2 *= 2;
+                        damage2 *=  2;
+                        break;
                     }
                 }
             }
@@ -168,7 +178,7 @@ public class Battle {
         return calculateDamage(damage1, damage2);
     }
 
-    private int compareMonsterType(Card card1, Card card2){
+    public int compareMonsterType(Card card1, Card card2){
         int damage1 = card1.getDamage();
         int damage2 = card2.getDamage();
         MonsterType type1 = ((MonsterCard)card1).getMonsterType();
@@ -234,10 +244,10 @@ public class Battle {
             }
             damage2 = card2.getDamage();
         }
-        return calculateDamage(damage1, damage1);
+        return calculateDamage(damage1, damage2);
     }
 
-    private int calculateDamage(int damage1, int damage2){
+    public int calculateDamage(int damage1, int damage2){
         log.append(damage1);
         log.append(" vs ");
         log.append(damage2);
@@ -253,7 +263,7 @@ public class Battle {
         return 0;
     }
 
-    private void exchangeCards(Card card1, Card card2, int compareResult){
+    public void exchangeCards(Card card1, Card card2, int compareResult){
         deck1.removeFirstCard();
         deck2.removeFirstCard();
 

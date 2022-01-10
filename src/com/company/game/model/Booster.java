@@ -54,7 +54,7 @@ public class Booster {
         booster.add(card);
     }
 
-    private void createBooster() {
+    public void createBooster() {
         ArrayList<Card> legendaryCards;
         ArrayList<Card> ultraRareCards;
         ArrayList<Card> rareCards;

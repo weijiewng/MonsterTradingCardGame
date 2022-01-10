@@ -41,51 +41,6 @@ public class User {
         this.deck = new Deck();
     }
 
-    public User(String name, String bio, String image) {
-        this.coins = 20;
-        this.elo = 100;
-        this.cardList = new ArrayList<Card>();
-        this.deck = new Deck();
-        this.name = name;
-        this.bio = bio;
-        this.image = image;
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-        this.coins = 20;
-        this.elo = 100;
-        this.cardList = new ArrayList<Card>();
-        this.deck = new Deck();
-    }
-
-    public User(String token, String username, String password, int coins, int elo, ArrayList<Card> cardList, Deck deck) {
-        this.token = token;
-        this.username = username;
-        this.password = password;
-        this.coins = coins;
-        this.elo = elo;
-        this.cardList = cardList;
-        this.deck = deck;
-    }
-
-    public User(String token, String username, String password, int coins, int elo, ArrayList<Card> cardList, Deck deck, int win, int lose, int draw, String name, String bio, String image) {
-        this.token = token;
-        this.username = username;
-        this.password = password;
-        this.coins = coins;
-        this.elo = elo;
-        this.cardList = cardList;
-        this.deck = deck;
-        this.win = win;
-        this.lose = lose;
-        this.draw = draw;
-        this.name = name;
-        this.bio = bio;
-        this.image = image;
-    }
-
     public String getToken() {
         return token;
     }
@@ -191,28 +146,28 @@ public class User {
     }
 
     public String jsonUserData(){
-        return "{ \"username\" = \"" + username +
-                "\", \"coins\"= " + coins +
-                ", \"name\"= \"" + name +
-                "\", \"bio\"= \"" + image +
-                "\", \"bio\"= \"" + bio +
+        return "{\"username\" = \"" + username +
+                "\", \"coins\" = " + coins +
+                ", \"name\" = \"" + name +
+                "\", \"bio\" = \"" + bio +
+                "\", \"image\" = \"" + image +
                 "\"}";
     }
 
     public String jsonStats(){
         return "{\"username\" = \"" + username +
-                "\", \"win\"= " + win +
-                ", \"lose\"= " + lose +
-                "\", \"draw\"= " + draw +
+                "\", \"win\" = " + win +
+                ", \"lose\" = " + lose +
+                ", \"draw\" = " + draw +
                 "}";
     }
 
     public String jsonScore(){
         return "{\"username\" = \"" + username +
-                "\", \"elo\"= " + elo +
-                "\", \"win\"= " + win +
-                ", \"lose\"= " + lose +
-                "\", \"draw\"= " + draw +
+                "\", \"elo\" = " + elo +
+                ", \"win\" = " + win +
+                ", \"lose\" = " + lose +
+                ", \"draw\" = " + draw +
                 "}";
     }
 }

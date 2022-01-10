@@ -19,14 +19,6 @@ public class TradeDeal {
 
     }
 
-    public TradeDeal(String id, String cardId, int minDamage, Element element, String userId) {
-        this.id = id;
-        this.cardId = cardId;
-        this.minDamage = minDamage;
-        this.element = element;
-        this.userId = userId;
-    }
-
     public String getId() {
         return id;
     }
