@@ -24,6 +24,10 @@ public class User {
     private Deck deck;
 
     public User(){
+        this.coins = 20;
+        this.elo = 100;
+        this.cardList = new ArrayList<Card>();
+        this.deck = new Deck();
     }
 
     public User(String username, String password) {
@@ -32,7 +36,7 @@ public class User {
         this.coins = 20;
         this.elo = 100;
         this.cardList = new ArrayList<Card>();
-        //TODO DECK
+        this.deck = new Deck();
     }
 
     public User(String token, String username, String password, int coins, int elo, ArrayList<Card> cardList, Deck deck) {
@@ -98,7 +102,7 @@ public class User {
     }
 
     public void setDeck(Deck deck) {
-        this.deck = deck;
+        this.deck = new Deck(deck.getDeck());
     }
 
     public void minusCoins(int amount){

@@ -3,8 +3,10 @@ package com.company.game.controller;
 import com.company.game.model.Card;
 import com.company.game.model.MonsterCard;
 import com.company.game.model.SpellCard;
+import com.company.game.model.User;
 import com.company.game.repository.CardRepository;
 import com.company.game.service.CardService;
+import com.company.game.service.UserService;
 import com.company.game.util.Toolbox;
 import com.company.server.Request;
 import com.company.server.Response;
@@ -14,6 +16,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
 
 
 public class CardController extends Controller{
@@ -34,12 +38,16 @@ public class CardController extends Controller{
             }
         }
         else if(request.getMethod().equals("GET")){
-            
+            if(request.getAuthorization() != null) {
+                return showCardsFromUser(request.getAuthorization());
+            }
+            return response(HttpStatus.BAD_REQUEST, ContentType.HTML, HttpStatus.BAD_REQUEST.message);
+
         }
         return response(
                 HttpStatus.NOT_FOUND,
-                ContentType.JSON,
-                "{ \"error\": \"Not Found\"}"
+                ContentType.HTML,
+                HttpStatus.NOT_FOUND.message
         );
     }
     public Response addCard(String json) throws JsonProcessingException {
@@ -48,19 +56,32 @@ public class CardController extends Controller{
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(json);
 
-        if(jsonNode.get("Type").asText() != null){
+        if(jsonNode.has("MonsterType")){
             card = objectMapper.readValue(json, MonsterCard.class);
         }
         else{
             card = objectMapper.readValue(json, SpellCard.class);
         }
 
-        card.setId(Toolbox.createUUID());
+
+        if(card.getId() == null){
+            card.setId(Toolbox.createUUID());
+        }
         card = cardRepository.save(card);
         if(card != null){
             return response(HttpStatus.OK, ContentType.JSON, card.getId());
         }
-        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, "Bad Request");
+        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, HttpStatus.BAD_REQUEST.message);
+    }
+
+    public Response showCardsFromUser(String token){
+        User user = UserService.getUser(token);
+        ArrayList<Card> cardList = cardRepository.getAllCardsFromUser(token);
+        if(cardList != null){
+            user.setCardList(cardList);
+            return json(user.getCardList());
+        }
+        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, HttpStatus.BAD_REQUEST.message);
     }
 
 }

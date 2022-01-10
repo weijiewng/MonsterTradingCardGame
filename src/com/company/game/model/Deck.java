@@ -2,12 +2,15 @@ package com.company.game.model;
 
 import java.util.LinkedList;
 
-//TODO check if Cards are available in the stack
 public class Deck {
     private LinkedList<Card> deck;
 
     public Deck() {
         this.deck = new LinkedList<Card>();
+    }
+
+    public Deck(LinkedList<Card> deck){
+        this.deck = new LinkedList<Card>(deck);
     }
 
     public LinkedList<Card> getDeck() {

@@ -17,13 +17,14 @@ public class GameApi implements ServerApplication {
     private BoosterController boosterController;
     private BattleController battleController;
     private DeckController deckController;
-
+    private TransactionController transactionController;
     public GameApi() {
-        this.userController = new UserController(new UserService(), new UserRepository());
+        this.userController = new UserController(new UserRepository());
         this.cardController = new CardController(new CardService(), new CardRepository());
-        this.boosterController = new BoosterController(new BoosterService(), new BoosterRepository());
-        this.battleController = new BattleController(new BattleService(), new BattleRepository());
+        this.boosterController = new BoosterController(new BoosterService(), new BoosterRepository(), new CardRepository());
+        this.battleController = new BattleController(new BattleService(), new BattleRepository(), new DeckRepository());
         this.deckController = new DeckController(new DeckService(), new DeckRepository());
+        this.transactionController = new TransactionController(new TransactionRepository());
     }
 
     @Override
@@ -40,17 +41,20 @@ public class GameApi implements ServerApplication {
             case "/boosters":{
                 return boosterController.handleRequest(request);
             }
+            case "/transactions/boosters":{
+                return transactionController.handleRequest(request);
+            }
             case "/battles":{
                 return battleController.handleRequest(request);
             }
-            case "/deck":{
+            case "/decks":{
                 return deckController.handleRequest(request);
             }
         }
         Response response = new Response();
         response.setStatus(HttpStatus.NOT_FOUND);
-        response.setContentType(ContentType.JSON);
-        response.setContent("{ \"error\": \"Not Found\"}");
+        response.setContentType(ContentType.HTML);
+        response.setContent("Command not found");
         return response;
     }
 }

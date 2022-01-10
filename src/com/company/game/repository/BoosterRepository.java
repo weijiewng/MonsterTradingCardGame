@@ -1,5 +1,6 @@
 package com.company.game.repository;
 
+import com.company.game.enums.BoosterName;
 import com.company.game.enums.Element;
 import com.company.game.enums.Rarity;
 import com.company.game.enums.MonsterType;
@@ -7,6 +8,7 @@ import com.company.game.model.Booster;
 import com.company.game.model.Card;
 import com.company.game.model.MonsterCard;
 import com.company.game.model.SpellCard;
+import com.company.game.util.Toolbox;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,99 +17,48 @@ import java.util.ArrayList;
 public class BoosterRepository extends Repository{
 
     //TODO Change
-    public void saveBooster(ArrayList<String> cardIdList){
-        int id = 0;
-        //Maybe without prepared
-        try(Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT COUNT(*) as rowcount FROM Booster; "
-            )
-        ){
-            ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
-                id = resultSet.getInt("rowcount");
-            }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-        for (int i = 0; i < cardIdList.size() ; i++) {
+    public boolean saveBooster(ArrayList<Card> booster, String boosterName, int cost){
+        String uuid = Toolbox.createUUID();
+        for (int i = 0; i < booster.size(); i++) {
             try(Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO Booster (id, cardID) VALUES (?,?); "
+                        "INSERT INTO booster (id, name, card_id, cost) VALUES (?, ?, ?, ?); "
                 )
             ){
-                statement.setInt(1, id);
-                statement.setString(2, cardIdList.get(i));
+                statement.setString(1, uuid);
+                statement.setString(2, boosterName);
+                statement.setString(3, booster.get(i).getId());
+                statement.setInt(4, cost);
                 statement.execute();
             }
             catch(SQLException e){
                 e.printStackTrace();
+                return false;
             }
         }
+        return true;
     }
 
-    public Booster getBooster(){
-        Booster booster = new Booster();
-        try(Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(
-                    //TODO Looking which is the first booster
-                    "SELECT * FROM booster WHERE id = 1"
-            )
-        ){
-            ResultSet resultSet =  statement.executeQuery();
-            ArrayList<String> cardIdList = new ArrayList<String>();
-            while(resultSet.next()){
-                cardIdList.add(resultSet.getString("card_id"));
+    public boolean saveBooster(ArrayList<String> cardIdList){
+        String uuid = Toolbox.createUUID();
+        for (int i = 0; i < cardIdList.size(); i++) {
+            try(Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        "INSERT INTO booster (id, name, card_id, cost) VALUES (?, ?, ?, ?); "
+                )
+            ){
+                statement.setString(1, uuid);
+                statement.setString(2, BoosterName.DEFAULT.name);
+                statement.setString(3, cardIdList.get(i));
+                statement.setInt(4, 5);
+                statement.execute();
             }
-            Card card;
-            for (int i = 0; i < cardIdList.size(); i++) {
-                try (PreparedStatement secondStatement = connection.prepareStatement(
-                        "SELECT class, name, damage, element, rarity, mosnterType FROM card LEFT JOIN booster ON card.id = booster.cardID WHERE booster.id = ?"
-                )){
-                    secondStatement.setInt(1, 1);
-                    resultSet =  secondStatement.executeQuery();
-                    if(resultSet.next()){
-                        if(resultSet.getString("monsterType") != null){
-                            card = new MonsterCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
-                                    Element.valueOf(resultSet.getString("element")),
-                                    Rarity.valueOf(resultSet.getString("rarity")), MonsterType.valueOf(resultSet.getString("monsterTypeype")));
-                        }
-                else {
-                            card = new SpellCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
-                                    Element.valueOf(resultSet.getString("element")),
-                                    Rarity.valueOf(resultSet.getString("rarity")));
-                        }
-                        booster.addCard(card);
-                        //TODO after booster is generated
-                    }
-                }catch(SQLException e){
-                        e.printStackTrace();
-                    }
+            catch(SQLException e){
+                e.printStackTrace();
+                return false;
             }
         }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-        removeBooster();
-        return booster;
-    }
-
-    private void addBoosterToUser(){
-        //TODO add booster to user dont know how to do yet
-    }
-
-    private void removeBooster(){
-        try(Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(
-                    "DELETE FROM Booster WHERE id = 1"
-            )
-        ){
-            statement.execute();
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
+        return true;
     }
 }
 

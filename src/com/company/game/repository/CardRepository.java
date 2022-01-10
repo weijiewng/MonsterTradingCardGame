@@ -6,6 +6,7 @@ import com.company.game.model.SpellCard;
 import com.company.game.enums.Element;
 import com.company.game.enums.Rarity;
 import com.company.game.enums.MonsterType;
+import com.company.game.util.Toolbox;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,6 +30,9 @@ public class CardRepository extends Repository{
             if(card instanceof MonsterCard){
                 statement.setString(6, ((MonsterCard) card).getMonsterType().toString());
             }
+            else{
+                statement.setString(6, null);
+            }
             statement.execute();
             return card;
         }
@@ -38,7 +42,7 @@ public class CardRepository extends Repository{
         return null;
     }
 
-    public Optional<ArrayList<Card>> getAllCards(){
+    public ArrayList<Card> getAllCards(){
         try(Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT * FROM card"
@@ -48,24 +52,62 @@ public class CardRepository extends Repository{
             ArrayList<Card> cardList = new ArrayList<Card>();
             Card card;
             while(resultSet.next()){
-                //TODO maybe create class to get card names and stuff
-                if(resultSet.getString("monsterType") != null){
-                    card = new MonsterCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
-                            Element.valueOf(resultSet.getString("element")),
-                            Rarity.valueOf(resultSet.getString("rarity")), MonsterType.valueOf(resultSet.getString("monsterTypeype")));
-                }
-                else {
-                    card = new SpellCard(resultSet.getString("id"), resultSet.getString("name"), resultSet.getInt("damage"),
-                            Element.valueOf(resultSet.getString("element")),
-                            Rarity.valueOf(resultSet.getString("rarity")));
-                }
+                card = Toolbox.getCardFromResultSet(resultSet);
                 cardList.add(card);
             }
-            return Optional.of(cardList);
+            return cardList;
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<Card> getAllCardsFromUser(String token){
+        ArrayList<String> cardIdList = getCardIdFromCardholder(token);
+        if(cardIdList != null){
+            ArrayList<Card> cardList = new ArrayList<Card>();
+            Card card;
+            for (int i = 0; i < cardIdList.size(); i++) {
+                try(Connection connection = getConnection();
+                    PreparedStatement statement = connection.prepareStatement(
+                            "SELECT * FROM card WHERE id = ?"
+                    )
+                ){
+                    statement.setString(1, cardIdList.get(i));
+                    ResultSet resultSet = statement.executeQuery();
+                    if(resultSet.next()){
+                        card = Toolbox.getCardFromResultSet(resultSet);
+                        cardList.add(card);
+                    }
+                }
+                catch(SQLException e){
+                    e.printStackTrace();
+                }
+            }
+            return cardList;
+        }
+        return null;
+
+    }
+
+    private ArrayList<String> getCardIdFromCardholder(String token){
+        try(Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM cardholder WHERE user_id = ?"
+            )
+        ){
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+            ArrayList<String> cardIdList = new ArrayList<String>();
+            while(resultSet.next()){
+                cardIdList.add(resultSet.getString("card_id"));
+            }
+            return cardIdList;
         }
         catch(SQLException e){
             e.printStackTrace();
         }
-        return Optional.empty();
+        return null;
     }
 }

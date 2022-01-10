@@ -16,7 +16,7 @@ public class UserRepository extends Repository{
         try(Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(
                     //TODO set other values
-                    "INSERT INTO \"user\" (id, username, password) VALUES (?, ?, ?)"
+                    "INSERT INTO \"user\" (id, username, password, coins) VALUES (?, ?, ?, ?)"
             )
         ){
             String hash = Toolbox.createHash(user.getPassword());
@@ -25,6 +25,7 @@ public class UserRepository extends Repository{
                 statement.setString(1, user.getToken());
                 statement.setString(2, user.getUsername());
                 statement.setString(3, user.getPassword());
+                statement.setInt(4, user.getCoins());
                 statement.execute();
                 return user;
             }
@@ -43,10 +44,11 @@ public class UserRepository extends Repository{
             )
         ){
             statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
+            statement.setString(2, Toolbox.createHash(user.getPassword()));
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 user.setToken(resultSet.getString("id"));
+                user.setCoins(resultSet.getInt("coins"));
                 return user;
             }
         }
@@ -56,4 +58,5 @@ public class UserRepository extends Repository{
         //TODO Maybe error code dont know how to handle yet
         return null;
     }
+
 }

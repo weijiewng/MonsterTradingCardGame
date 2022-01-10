@@ -13,32 +13,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class UserController extends Controller{
 
     ObjectMapper objectMapper;
-    private final UserService userService;
     private final UserRepository userRepository;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserRepository userRepository) {
         this.objectMapper = new ObjectMapper();
-        this.userService = userService;
         this.userRepository = userRepository;
     }
 
     @Override
     public Response handleRequest(Request request) throws JsonProcessingException {
         if(request.getMethod().equals("POST")){
-            String[] splits = request.getRoute().split("/");
-            String route = splits[splits.length - 1];
-            if(route.equals("users")){
+            String route = request.getRoute();
+
+            if(route.equals("/users")){
                 return registration(request.getContent());
 
             }
-            else if(route.equals("sessions")){
+            else if(route.equals("/sessions")){
                 return login(request.getContent());
             }
         }
         return response(
                 HttpStatus.NOT_FOUND,
-                ContentType.JSON,
-                "{ \"error\": \"Not Found\"}"
+                ContentType.HTML, HttpStatus.NOT_FOUND.message
         );
     }
 
@@ -50,14 +47,16 @@ public class UserController extends Controller{
         if(user != null){
             return response(HttpStatus.OK, ContentType.JSON, user.getToken());
         }
-        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, "Bad Request");
+        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, HttpStatus.BAD_REQUEST.message);
     }
 
     private Response login(String json) throws JsonProcessingException {
         User user = objectMapper.readValue(json, User.class);
-        userRepository.login(user);
-
-        return json(user);
+        if(userRepository.login(user) != null){
+            UserService.addUser(user);
+            return response(HttpStatus.OK, ContentType.HTML, HttpStatus.OK.message);
+        }
+        return response(HttpStatus.BAD_REQUEST, ContentType.HTML, HttpStatus.BAD_REQUEST.message);
     }
 
 
