@@ -384,7 +384,7 @@ class core_string_manager_standard implements core_string_manager {
             }
         }
 
-        if ($CFG->debugdeveloper) {
+        if ($CFG->debugdeveloper) {      
             // Display a debugging message if sting exists but was deprecated.
             if ($this->string_deprecated($identifier, $component)) {
                 list($plugintype, $pluginname) = core_component::normalize_component($component);

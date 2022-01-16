@@ -7279,7 +7279,6 @@ function get_string($identifier, $component = '', $a = null, $lazyload = false) 
                 break;
         }
     }
-
     $result = get_string_manager()->get_string($identifier, $component, $a);
 
     // Debugging feature lets you display string identifier and component.
